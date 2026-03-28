@@ -14,6 +14,14 @@ export const translations = {
     disclaimer:
       "Labels are AI-assisted. Always verify with your local gas dealer or official government channels before making decisions.",
     lastUpdated: "Last Updated",
+    fetchLiveNews: "Fetch Live News",
+    fetchLiveNewsLoading: "Loading live news…",
+    fetchLiveNewsError: "Could not fetch news. Try again.",
+    reportsAdded: "{count} reports added",
+    clearAll: "Clear All",
+    clearAllLoading: "Clearing…",
+    fetchSkipDetail:
+      "Skipped {skipped} (duplicates: {dup}, classify: {cls}, empty titles: {empty}).",
   },
   hi: {
     appName: "एलपीजी कमी मॉनिटर",
@@ -28,6 +36,14 @@ export const translations = {
     disclaimer:
       "लेबल AI द्वारा सहायता प्राप्त हैं। निर्णय लेने से पहले अपने स्थानीय गैस डीलर या सरकारी चैनल से सत्यापित करें।",
     lastUpdated: "अंतिम अपडेट",
+    fetchLiveNews: "लाइव न्यूज़ लाएँ",
+    fetchLiveNewsLoading: "लाइव न्यूज़ लोड हो रही है…",
+    fetchLiveNewsError: "न्यूज़ नहीं मिली। दोबारा कोशिश करें।",
+    reportsAdded: "{count} रिपोर्ट जोड़ी गईं",
+    clearAll: "सब हटाएँ",
+    clearAllLoading: "हट रहा है…",
+    fetchSkipDetail:
+      "{skipped} छोड़े (डुप्लिकेट: {dup}, क्लासिफाई: {cls}, खाली शीर्षक: {empty})।",
   },
 } as const;
 

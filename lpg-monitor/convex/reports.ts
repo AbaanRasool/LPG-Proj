@@ -120,6 +120,18 @@ export const addReport = mutation({
   },
 });
 
+/** Deletes every row in reports (for dev / resetting before fetch). */
+export const clearAllReports = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const existing = await ctx.db.query("reports").collect();
+    for (const doc of existing) {
+      await ctx.db.delete(doc._id);
+    }
+    return { deleted: existing.length };
+  },
+});
+
 /** Returns reports that match a status: red, yellow, or green. */
 export const getReportsByStatus = query({
   args: { status: v.string() },
