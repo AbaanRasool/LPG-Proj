@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { Doc } from "@/convex/_generated/dataModel";
-import { Locale } from "@/lib/translations";
+import { Locale, translations } from "@/lib/translations";
 
 export type RecommendationStatus = "red" | "yellow" | "green";
 
@@ -122,27 +122,35 @@ const CONTENT: Record<Locale, Record<RecommendationStatus, Block>> = {
 
 const SHELL: Record<
   RecommendationStatus,
-  { border: string; bg: string; text: string; check: string }
+  { left: string; accent: string; check: string }
 > = {
   red: {
-    border: "border-red-400",
-    bg: "bg-red-50",
-    text: "text-red-800",
-    check: "text-red-600",
+    left: "border-l-red-500",
+    accent: "border-t-red-500",
+    check: "text-red-300",
   },
   yellow: {
-    border: "border-yellow-400",
-    bg: "bg-yellow-50",
-    text: "text-yellow-800",
-    check: "text-yellow-700",
+    left: "border-l-yellow-500",
+    accent: "border-t-yellow-500",
+    check: "text-yellow-200",
   },
   green: {
-    border: "border-green-400",
-    bg: "bg-green-50",
-    text: "text-green-800",
-    check: "text-green-700",
+    left: "border-l-green-500",
+    accent: "border-t-green-500",
+    check: "text-green-300",
   },
 };
+
+type TabId = "immediate" | "alternative" | "tips";
+
+function splitTipsByTab(tips: string[]): Record<TabId, string[]> {
+  const chunk = Math.ceil(tips.length / 3);
+  return {
+    immediate: tips.slice(0, chunk),
+    alternative: tips.slice(chunk, chunk * 2),
+    tips: tips.slice(chunk * 2),
+  };
+}
 
 const INITIAL_VISIBLE = 3;
 
@@ -152,40 +160,78 @@ type Props = {
 };
 
 export function Recommendations({ status, locale }: Props) {
+  const t = translations[locale];
+  const [tab, setTab] = useState<TabId>("immediate");
   const [expanded, setExpanded] = useState(false);
+
   useEffect(() => {
     setExpanded(false);
+    setTab("immediate");
   }, [status, locale]);
 
   const block = CONTENT[locale][status];
   const shell = SHELL[status];
 
+  const byTab = useMemo(() => splitTipsByTab(block.tips), [block.tips]);
+  const activeTips = byTab[tab];
+
   const { visibleTips, hiddenTips, hasHidden } = useMemo(() => {
-    const tips = block.tips;
     return {
-      visibleTips: tips.slice(0, INITIAL_VISIBLE),
-      hiddenTips: tips.slice(INITIAL_VISIBLE),
-      hasHidden: tips.length > INITIAL_VISIBLE,
+      visibleTips: activeTips.slice(0, INITIAL_VISIBLE),
+      hiddenTips: activeTips.slice(INITIAL_VISIBLE),
+      hasHidden: activeTips.length > INITIAL_VISIBLE,
     };
-  }, [block.tips]);
+  }, [activeTips]);
+
+  const tabs: { id: TabId; label: string }[] = [
+    { id: "immediate", label: t.recTabImmediate },
+    { id: "alternative", label: t.recTabAlternative },
+    { id: "tips", label: t.recTabTips },
+  ];
 
   return (
     <aside
       lang={locale}
-      className={`rounded-xl border-2 p-4 shadow-sm ${shell.border} ${shell.bg} ${shell.text}`}
+      className={`glass overflow-hidden rounded-2xl border border-white/10 border-t-[3px] ${shell.accent} border-l-4 ${shell.left} p-6 shadow-lg`}
       aria-labelledby="recommendations-title"
     >
       <h2
         id="recommendations-title"
-        className="text-lg font-bold leading-snug sm:text-xl"
+        className="text-lg font-bold leading-snug text-white sm:text-xl"
       >
         {block.title}
       </h2>
-      <p className="mt-1 text-base font-semibold opacity-95">{block.subtitle}</p>
+      <p className="mt-1 text-base font-semibold text-indigo-300/90">{block.subtitle}</p>
 
-      <ul className="mt-4 flex flex-col gap-3 text-base leading-relaxed">
+      <div
+        className="mt-4 flex flex-wrap gap-2 border-b border-white/10 pb-3"
+        role="tablist"
+        aria-label={t.recommendationsTitle}
+      >
+        {tabs.map((item) => (
+          <button
+            key={item.id}
+            type="button"
+            role="tab"
+            aria-selected={tab === item.id}
+            onClick={() => {
+              setTab(item.id);
+              setExpanded(false);
+            }}
+            className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+              tab === item.id
+                ? "bg-indigo-500/30 text-indigo-100 ring-1 ring-indigo-400/40"
+                : "text-white/60 hover:bg-white/10 hover:text-white"
+            }`}
+          >
+            {item.label}
+          </button>
+        ))}
+      </div>
+
+      <ul className="mt-4 flex flex-col gap-6 text-base leading-relaxed text-gray-300">
         {visibleTips.map((tip, i) => (
-          <li key={`v-${i}`} className="flex gap-2">
+          <li key={`v-${tab}-${i}`} className="flex gap-3">
             <span className={`shrink-0 font-bold ${shell.check}`} aria-hidden>
               ✓
             </span>
@@ -197,31 +243,26 @@ export function Recommendations({ status, locale }: Props) {
       {hasHidden ? (
         <>
           <div
-            className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${
-              expanded ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+            className={`overflow-hidden transition-[max-height] duration-[400ms] ease-in-out ${
+              expanded ? "max-h-[600px]" : "max-h-0"
             }`}
           >
-            <div className="overflow-hidden">
-              <ul className="mt-3 flex flex-col gap-3 border-t border-black/10 pt-3 text-base leading-relaxed">
-                {hiddenTips.map((tip, i) => (
-                  <li key={`h-${i}`} className="flex gap-2">
-                    <span
-                      className={`shrink-0 font-bold ${shell.check}`}
-                      aria-hidden
-                    >
-                      ✓
-                    </span>
-                    <span>{tip}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <ul className="mt-6 flex flex-col gap-6 border-t border-white/10 pt-6 text-base leading-relaxed text-gray-300">
+              {hiddenTips.map((tip, i) => (
+                <li key={`h-${tab}-${i}`} className="flex gap-3">
+                  <span className={`shrink-0 font-bold ${shell.check}`} aria-hidden>
+                    ✓
+                  </span>
+                  <span>{tip}</span>
+                </li>
+              ))}
+            </ul>
           </div>
 
           <button
             type="button"
             onClick={() => setExpanded((e) => !e)}
-            className="mt-4 w-full rounded-lg border border-black/15 bg-white/60 px-4 py-3 text-base font-semibold underline-offset-2 hover:bg-white/90 sm:text-lg"
+            className="mt-6 w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-base font-semibold text-indigo-200 transition hover:bg-white/10"
           >
             {expanded ? block.showLess : block.showMore}
           </button>

@@ -14,7 +14,7 @@ export function LanguageToggle({ locale, onToggle }: Props) {
     <button
       type="button"
       onClick={onToggle}
-      className="min-h-[44px] min-w-[44px] rounded-lg border-2 border-gray-800 bg-white px-4 py-2 text-base font-semibold text-gray-900 shadow-sm active:scale-[0.98]"
+      className="min-h-[44px] min-w-[44px] rounded-full border border-indigo-400/40 bg-indigo-500/20 px-4 py-2 text-sm font-semibold text-indigo-200 shadow-inner transition hover:bg-indigo-500/35 active:scale-[0.98]"
     >
       {label}
     </button>

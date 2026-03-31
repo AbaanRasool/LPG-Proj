@@ -13,11 +13,11 @@ export function StatusSummary({ reports, locale }: Props) {
 
   if (reports === undefined) {
     return (
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         {[1, 2, 3].map((i) => (
           <div
             key={i}
-            className="h-[52px] animate-pulse rounded-lg border-2 border-gray-200 bg-gray-100"
+            className="glass h-36 rounded-2xl border border-white/10 shimmer"
           />
         ))}
       </div>
@@ -29,30 +29,36 @@ export function StatusSummary({ reports, locale }: Props) {
   const green = reports.filter((r) => r.status === "green").length;
 
   return (
-    <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-      <div className="flex min-h-[52px] items-center justify-center gap-2 rounded-lg border-2 border-red-200 bg-red-50 px-3 py-3 text-center text-red-900">
-        <span className="text-xl" aria-hidden>
-          🔴
+    <div className="-mx-2 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 sm:mx-0 sm:grid sm:grid-cols-3 sm:overflow-visible sm:pb-0">
+      <div className="glass card-hover relative min-w-[240px] shrink-0 snap-center overflow-hidden rounded-2xl border border-white/10 border-t-[3px] border-t-red-500 px-4 py-6 text-center shadow-[0_-4px_20px_rgba(239,68,68,0.35)] animate-glow-red sm:min-w-0 sm:shrink">
+        <span className="text-5xl font-bold tabular-nums text-white animate-count-up">
+          {red}
         </span>
-        <span className="text-base font-bold">
-          {red} {t.critical}
+        <span className="mt-2 block text-sm font-bold uppercase tracking-wider text-red-300">
+          {t.statusSummaryCritical}
         </span>
+        <span className="mt-1 block text-xs text-[var(--text-secondary)]">{t.areasLabel}</span>
+        <span className="mt-2 block text-xs text-white/50">{t.trendCritical}</span>
       </div>
-      <div className="flex min-h-[52px] items-center justify-center gap-2 rounded-lg border-2 border-yellow-200 bg-yellow-50 px-3 py-3 text-center text-yellow-900">
-        <span className="text-xl" aria-hidden>
-          🟡
+      <div className="glass card-hover relative min-w-[240px] shrink-0 snap-center overflow-hidden rounded-2xl border border-white/10 border-t-[3px] border-t-amber-500 px-4 py-6 text-center shadow-[0_-4px_20px_rgba(245,158,11,0.35)] animate-glow-yellow sm:min-w-0 sm:shrink">
+        <span className="text-5xl font-bold tabular-nums text-white animate-count-up">
+          {yellow}
         </span>
-        <span className="text-base font-bold">
-          {yellow} {t.moderate}
+        <span className="mt-2 block text-sm font-bold uppercase tracking-wider text-amber-200">
+          {t.statusSummaryModerate}
         </span>
+        <span className="mt-1 block text-xs text-[var(--text-secondary)]">{t.areasLabel}</span>
+        <span className="mt-2 block text-xs text-white/50">{t.trendModerate}</span>
       </div>
-      <div className="flex min-h-[52px] items-center justify-center gap-2 rounded-lg border-2 border-green-200 bg-green-50 px-3 py-3 text-center text-green-900">
-        <span className="text-xl" aria-hidden>
-          🟢
+      <div className="glass card-hover relative min-w-[240px] shrink-0 snap-center overflow-hidden rounded-2xl border border-white/10 border-t-[3px] border-t-emerald-500 px-4 py-6 text-center shadow-[0_-4px_20px_rgba(16,185,129,0.35)] animate-glow-green sm:min-w-0 sm:shrink">
+        <span className="text-5xl font-bold tabular-nums text-white animate-count-up">
+          {green}
         </span>
-        <span className="text-base font-bold">
-          {green} {t.normal}
+        <span className="mt-2 block text-sm font-bold uppercase tracking-wider text-emerald-200">
+          {t.statusSummaryNormal}
         </span>
+        <span className="mt-1 block text-xs text-[var(--text-secondary)]">{t.areasLabel}</span>
+        <span className="mt-2 block text-xs text-white/50">{t.trendNormal}</span>
       </div>
     </div>
   );

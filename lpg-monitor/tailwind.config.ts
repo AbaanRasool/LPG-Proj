@@ -11,6 +11,20 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        pulse: {
+          bg: "var(--bg)",
+          card: "var(--card)",
+          accent: "var(--accent)",
+          "accent-2": "var(--accent-2)",
+        },
+      },
+      fontFamily: {
+        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+      },
+      animation: {
+        "pulse-dot": "pulse-dot 1.5s ease-in-out infinite",
+        radar: "radar 2.5s ease-out infinite",
+        "live-bar": "live-bar 2.2s linear infinite",
       },
     },
   },
