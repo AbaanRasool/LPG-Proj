@@ -11,7 +11,7 @@ import {
   Recommendations,
   overallRecommendationStatus,
 } from "@/components/Recommendations";
-import { IndiaOverviewWidget } from "@/components/IndiaOverviewWidget";
+import { IndiaHeroMapPanel } from "@/components/IndiaHeroMapPanel";
 import { AreaStatusCard } from "@/components/AreaStatusCard";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -293,8 +293,8 @@ export function Dashboard() {
       />
 
       <section className="rounded-3xl bg-gradient-to-b from-[#0A0A0F] to-[#12121A] px-4 py-10 sm:px-8 sm:py-12">
-        <div className="grid gap-10 lg:grid-cols-5 lg:items-start lg:gap-12">
-          <div className="flex flex-col gap-8 lg:col-span-3">
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:items-stretch lg:gap-12">
+          <div className="flex min-h-0 flex-1 flex-col gap-8">
             <span className="inline-flex w-fit items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-4 py-1.5 text-xs font-semibold text-indigo-200">
               {t.heroTag}
             </span>
@@ -355,15 +355,17 @@ export function Dashboard() {
             </div>
           </div>
 
-          <div className="lg:col-span-2">
+          <div className="flex min-h-0 min-w-0 flex-1 flex-col">
             {sorted === undefined ? (
-              <div className="glass h-64 animate-pulse rounded-2xl border border-white/10" />
+              <div className="glass min-h-[500px] w-full animate-pulse rounded-2xl border border-white/10" />
             ) : (
-              <IndiaOverviewWidget
+              <IndiaHeroMapPanel
                 red={indiaCounts.red}
                 yellow={indiaCounts.yellow}
                 green={indiaCounts.green}
                 locale={locale}
+                reports={sorted}
+                onCitySelect={(city) => setSearchQuery(city)}
               />
             )}
           </div>

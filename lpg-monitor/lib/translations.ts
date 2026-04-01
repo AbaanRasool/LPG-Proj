@@ -73,6 +73,10 @@ export const translations = {
     statusSummaryCritical: "CRITICAL",
     statusSummaryModerate: "MODERATE",
     statusSummaryNormal: "NORMAL",
+    mapTitle: "INDIA — CITY STATUS MAP",
+    mapMonitoringCities: "Monitoring {count} cities",
+    mapLiveUpdates: "Live updates",
+    mapAllIndia: "All India",
   },
   hi: {
     appName: "एलपीजी कमी मॉनिटर",
@@ -145,6 +149,10 @@ export const translations = {
     statusSummaryCritical: "गंभीर",
     statusSummaryModerate: "मध्यम",
     statusSummaryNormal: "सामान्य",
+    mapTitle: "भारत — शहर स्थिति मानचित्र",
+    mapMonitoringCities: "{count} शहरों पर नज़र",
+    mapLiveUpdates: "लाइव अपडेट",
+    mapAllIndia: "पूरा भारत",
   },
 } as const;
 
